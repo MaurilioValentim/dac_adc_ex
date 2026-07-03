@@ -9,7 +9,7 @@ CMD_SRCS += \
 ../2837xD_RAM_lnk_cpu1.cmd 
 
 SYSCFG_SRCS += \
-../dac_adc.syscfg 
+../Tensao_PHIL.syscfg 
 
 LIB_SRCS += \
 C:/ti/c2000/C2000Ware_5_04_00_00/driverlib/f2837xd/driverlib/ccs/Debug/driverlib.lib 
@@ -82,7 +82,7 @@ GEN_FILES__QUOTED += \
 "syscfg\c2000ware_libraries.c" 
 
 SYSCFG_SRCS__QUOTED += \
-"../dac_adc.syscfg" 
+"../Tensao_PHIL.syscfg" 
 
 C_SRCS__QUOTED += \
 "./syscfg/board.c" \

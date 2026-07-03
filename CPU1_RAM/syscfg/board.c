@@ -91,7 +91,7 @@ void ADC0_init(){
 	//
 	// Sets the timing of the end-of-conversion pulse
 	//
-	ADC_setInterruptPulseMode(ADC0_BASE, ADC_PULSE_END_OF_CONV);
+	ADC_setInterruptPulseMode(ADC0_BASE, ADC_PULSE_END_OF_ACQ_WIN);
 	//
 	// Powers up the analog-to-digital converter core.
 	//
@@ -116,24 +116,13 @@ void ADC0_init(){
 	//
 	// Configures a start-of-conversion (SOC) in the ADC and its interrupt SOC trigger.
 	// 	  	SOC number		: 0
-	//	  	Trigger			: ADC_TRIGGER_CPU1_TINT0
-	//	  	Channel			: ADC_CH_ADCIN0
+	//	  	Trigger			: ADC_TRIGGER_CPU1_TINT1
+	//	  	Channel			: ADC_CH_ADCIN2
 	//	 	Sample Window	: 15 SYSCLK cycles
 	//		Interrupt Trigger: ADC_INT_SOC_TRIGGER_NONE
 	//
-	ADC_setupSOC(ADC0_BASE, ADC_SOC_NUMBER0, ADC_TRIGGER_CPU1_TINT0, ADC_CH_ADCIN0, 15U);
+	ADC_setupSOC(ADC0_BASE, ADC_SOC_NUMBER0, ADC_TRIGGER_CPU1_TINT1, ADC_CH_ADCIN2, 15U);
 	ADC_setInterruptSOCTrigger(ADC0_BASE, ADC_SOC_NUMBER0, ADC_INT_SOC_TRIGGER_NONE);
-	//
-	// ADC Interrupt 1 Configuration
-	// 		Source	: ADC_SOC_NUMBER0
-	// 		Interrupt Source: enabled
-	// 		Continuous Mode	: disabled
-	//
-	//
-	ADC_setInterruptSource(ADC0_BASE, ADC_INT_NUMBER1, ADC_SOC_NUMBER0);
-	ADC_clearInterruptStatus(ADC0_BASE, ADC_INT_NUMBER1);
-	ADC_disableContinuousMode(ADC0_BASE, ADC_INT_NUMBER1);
-	ADC_enableInterrupt(ADC0_BASE, ADC_INT_NUMBER1);
 }
 
 
@@ -143,20 +132,9 @@ void ADC0_init(){
 //
 //*****************************************************************************
 void CPUTIMER_init(){
-	myCPUTIMER0_init();
 	myCPUTIMER1_init();
 }
 
-void myCPUTIMER0_init(){
-	CPUTimer_setEmulationMode(myCPUTIMER0_BASE, CPUTIMER_EMULATIONMODE_RUNFREE);
-	CPUTimer_setPreScaler(myCPUTIMER0_BASE, 0U);
-	CPUTimer_setPeriod(myCPUTIMER0_BASE, 39999U);
-	CPUTimer_enableInterrupt(myCPUTIMER0_BASE);
-	CPUTimer_stopTimer(myCPUTIMER0_BASE);
-
-	CPUTimer_reloadTimerCounter(myCPUTIMER0_BASE);
-	CPUTimer_startTimer(myCPUTIMER0_BASE);
-}
 void myCPUTIMER1_init(){
 	CPUTimer_setEmulationMode(myCPUTIMER1_BASE, CPUTIMER_EMULATIONMODE_RUNFREE);
 	CPUTimer_setPreScaler(myCPUTIMER1_BASE, 0U);
@@ -207,11 +185,6 @@ void DAC0_init(){
 //
 //*****************************************************************************
 void INTERRUPT_init(){
-	
-	// Interrupt Settings for INT_ADC0_1
-	// ISR need to be defined for the registered interrupts
-	Interrupt_register(INT_ADC0_1, &INT_ADC0_1_ISR);
-	Interrupt_enable(INT_ADC0_1);
 	
 	// Interrupt Settings for INT_myCPUTIMER1
 	// ISR need to be defined for the registered interrupts
